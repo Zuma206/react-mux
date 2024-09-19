@@ -33,4 +33,13 @@ export class Router {
   map(callback: (route: Route, index: number) => unknown) {
     return this.routes.map(callback);
   }
+
+  /**
+   * Resolves a given path to the matching route
+   * @param path The path to resolve
+   * @returns The matching route, or null if no routes match
+   */
+  resolve(path: string) {
+    return this.routes.find((route) => route.test(path)) ?? null;
+  }
 }

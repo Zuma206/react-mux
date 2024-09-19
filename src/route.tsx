@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from "react";
+import { parse } from "regexparam";
 import { Router } from "./router";
 
 export type Layout = FC<PropsWithChildren<{}>>;
@@ -11,6 +12,8 @@ export class Route<Path extends string = string> {
    * A react node that should be rendered on the route
    */
   public readonly children: ReactNode;
+  private readonly pattern: RegExp;
+  private readonly keys: string[];
 
   /**
    * @param router The router the route is assigned to
@@ -24,6 +27,9 @@ export class Route<Path extends string = string> {
     ViewComponent: FC,
     private readonly layouts: Layout[]
   ) {
+    const { pattern, keys } = parse(path);
+    this.pattern = pattern;
+    this.keys = keys;
     this.children = layouts.reduce(
       (view, Layout) => <Layout>{view}</Layout>,
       <ViewComponent />
@@ -47,5 +53,14 @@ export class Route<Path extends string = string> {
       ViewComponent,
       ...[...this.layouts, ...additionalLayouts]
     );
+  }
+
+  /**
+   * Test if a given path matches this route
+   * @param path The path to test
+   * @returns True if the path matches, else false
+   */
+  test(path: string) {
+    return this.pattern.test(path);
   }
 }
