@@ -34,18 +34,18 @@ export class Route<Path extends string = string> {
    * Create a route that inherits this route's path and layouts
    * @param pathExtension The extension to the inherited path
    * @param ViewComponent The component to render on the route
-   * @param layouts Any layout components to wrap the view component
+   * @param additionalLayouts Any layout components to wrap the view component
    * @returns The created route instance
    */
   extendRoute<PathExtension extends string>(
     pathExtension: PathExtension,
     ViewComponent: FC,
-    ...layouts: Layout[]
+    ...additionalLayouts: Layout[]
   ) {
     return this.router.createRoute(
       `${this.path}${pathExtension}`,
       ViewComponent,
-      ...layouts
+      ...[...this.layouts, ...additionalLayouts]
     );
   }
 }
