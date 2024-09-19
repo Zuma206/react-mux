@@ -23,4 +23,14 @@ export class Router {
     this.routes.push(route);
     return route;
   }
+
+  /**
+   * Calls a callback on every element, and returns an array of transformed routes.
+   * Useful in getStaticParams/getStaticRoutes function to pre-render routes
+   * @param callback
+   * @returns Tranformed array of routes
+   */
+  map(callback: (route: Route, index: number) => unknown) {
+    return this.routes.map(callback);
+  }
 }
