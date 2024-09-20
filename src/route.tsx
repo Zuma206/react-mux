@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from "react";
-import { parse } from "regexparam";
+import { parse, RouteParams } from "regexparam";
 import { Router } from "./router";
 
 export type Layout = FC<PropsWithChildren<{}>>;
@@ -62,5 +62,18 @@ export class Route<Path extends string = string> {
    */
   test(path: string) {
     return this.pattern.test(path);
+  }
+
+  params(path: string): RouteParams<Path> {
+    const result = this.pattern.exec(path);
+    if (result === null)
+      throw new Error("Cannot get params from a path that does not match");
+    if (this.keys.length != result.length - 1)
+      throw new Error("Not enough params in path");
+    const params: any = {};
+    for (let i = 0; i < this.keys.length; i++) {
+      params[this.keys[i]] = result[i + 1];
+    }
+    return params;
   }
 }
