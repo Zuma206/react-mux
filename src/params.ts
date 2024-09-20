@@ -9,7 +9,7 @@ import { RouteParams } from "regexparam";
  * @param route The route to use to parse params
  * @returns The params from the path
  */
-export function useSSRParams<Path extends string>(route: Route<Path>) {
+export function useParams<Path extends string>(route: Route<Path>) {
   const { path } = useRouter();
   return useMemo(() => route.params(path), [path, route]);
 }
@@ -20,10 +20,10 @@ export function useSSRParams<Path extends string>(route: Route<Path>) {
  * @param route The route to use to parse params
  * @returns The params from the path after hydration, else an empty object
  */
-export function useParams<Path extends string>(
+export function useClientSideParams<Path extends string>(
   route: Route<Path>
 ): Partial<RouteParams<Path>> {
-  const params = useSSRParams(route);
+  const params = useParams(route);
   const { path } = useRouter();
   return typeof window !== "undefined" && location.pathname === path
     ? params
