@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import { Router } from "./router";
+import { Navigation } from "./navigation";
 
 type Context = {
   /**
@@ -18,6 +19,12 @@ type Context = {
    * The path currently being rendered
    */
   path: string;
+
+  /**
+   * Manually dispatch a navigation to a given route with given params
+   * @param navigation The navigation to dispatch
+   */
+  navigate<Path extends string>(navigation: Navigation<Path>): void;
 };
 
 export const Context = createContext<Context | null>(null);
